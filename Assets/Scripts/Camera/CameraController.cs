@@ -58,7 +58,10 @@ public class CameraController : MonoBehaviour
 
     private void LockCamera()
     {
-        Vector3 newPos = new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y, cam.transform.position.z);
-        cam.transform.position = newPos;
+        // Implement lerp or bool to toggle lerp to target?
+        if(FollowTarget) {
+            Vector3 newPos = new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y, cam.transform.position.z);
+            cam.transform.position = newPos;
+        }
     }
 }

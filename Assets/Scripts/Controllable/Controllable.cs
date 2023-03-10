@@ -78,6 +78,7 @@ public class Controllable : MonoBehaviour
 
     public virtual void Posess() {
         posessed = true;
+        // TODO make a follow target transform for a controllable
         cameraController.FollowTarget = gameObject;
     }
 

@@ -60,14 +60,14 @@ public class Vehicle : Controllable
         RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (moveSpeed * strafeMod));
     }
 
-    public override void Posess() {
-        posessed = true;
-    }
+    // public override void Posess() {
+    //     posessed = true;
+    // }
 
-    public override void UnPosess() {
-        posessed = false;
-        //rb.velocity = Vector3.zero;
-    }
+    // public override void UnPosess() {
+    //     posessed = false;
+    //     //rb.velocity = Vector3.zero;
+    // }
 
     private void ZoomOnVelocity() {
         //Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, 10 + (rb.velocity.magnitude / 2), Time.deltaTime);

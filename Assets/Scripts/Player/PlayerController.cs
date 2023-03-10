@@ -82,7 +82,7 @@ public class PlayerController : Controllable
             RigidBody.simulated = false;
             playerSprite.enabled = false;
             vehicle.Posess();
-            posessed = false;
+            UnPosess();
         }
     }
 
@@ -100,7 +100,7 @@ public class PlayerController : Controllable
             playerSprite.enabled = true;
             currentVehicle.UnPosess();
             currentVehicle = null;
-            posessed = true;
+            Posess();
 
             cameraController.TargetSize = 10;
             cameraController.ZoomSpeed = 2;
