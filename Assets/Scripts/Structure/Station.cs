@@ -5,13 +5,15 @@ using UnityEngine;
 public class Station : MonoBehaviour
 {
     [HideInInspector]
-    public Rigidbody2D rb;
+    private Rigidbody2D _rigidBody;
     private List<Entity> entities;
 
     private Vector3 lastPosition;
 
     [SerializeField]
     private Vector3 initialImpulse;
+
+    public Rigidbody2D RigidBody { get => _rigidBody; protected set => _rigidBody = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -20,13 +22,13 @@ public class Station : MonoBehaviour
 
         entities = new List<Entity>();
 
-        if(!TryGetComponent<Rigidbody2D>(out rb))
+        if(!TryGetComponent<Rigidbody2D>(out _rigidBody))
         {
-            rb = gameObject.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0;
+            RigidBody = gameObject.AddComponent<Rigidbody2D>();
+            RigidBody.gravityScale = 0;
         }
 
-        rb.AddForce(initialImpulse);
+        RigidBody.AddForce(initialImpulse);
     }
 
     // Update is called once per frame
@@ -46,7 +48,7 @@ public class Station : MonoBehaviour
         if(other.gameObject.TryGetComponent<Entity>(out entity)){
             entities.Add(entity);
             // Set velocity relative to station
-            entity.rb.velocity = entity.rb.velocity - rb.velocity;
+            entity.RigidBody.velocity = entity.RigidBody.velocity - RigidBody.velocity;
         }
 
         Debug.Log("Entered influence of " + gameObject.name);
@@ -56,7 +58,7 @@ public class Station : MonoBehaviour
         Entity entity;
         if(other.gameObject.TryGetComponent<Entity>(out entity)){
             entities.Remove(entity);
-            entity.rb.velocity = entity.rb.velocity + rb.velocity;
+            entity.RigidBody.velocity = entity.RigidBody.velocity + RigidBody.velocity;
         }
 
         Debug.Log("Left influence of " + gameObject.name);

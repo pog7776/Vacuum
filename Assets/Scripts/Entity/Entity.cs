@@ -4,49 +4,56 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    public Rigidbody2D rb;
-    public bool grounded = true;
+    [HideInInspector]
+    private Rigidbody2D rigidBody;
+
+    [SerializeField]
+    private bool grounded = true;
 
     [SerializeField]
     private float groundedDrag = 1;
-    
-    //public bool playerControlled = false;
-    private PlayerController controller;
+
+    private PlayerController playerController;
+
+    public Rigidbody2D RigidBody { get => rigidBody; private set => rigidBody = value; }
+    public bool Grounded { get => grounded; set => grounded = value; }
+    public float GroundedDrag { get => groundedDrag; set => groundedDrag = value; }
+    public PlayerController PlayerController { get => playerController; set => playerController = value; }
 
     //[SerializeField]
     //private bool physicsObject = true;
 
     // Start is called before the first frame update
     void Start() {
-        if(!TryGetComponent<Rigidbody2D>(out rb))
+        if(!TryGetComponent<Rigidbody2D>(out rigidBody))
         {
-            rb = gameObject.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0;
+            RigidBody = gameObject.AddComponent<Rigidbody2D>();
+            RigidBody.gravityScale = 0;
         }
 
-        controller = GetComponent<PlayerController>();
+        PlayerController = GetComponent<PlayerController>();
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Gravity") {
-            grounded = true;
+            Grounded = true;
             //rb.velocity = Vector3.zero;
-            rb.drag = groundedDrag;
+            RigidBody.drag = GroundedDrag;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if(other.tag == "Gravity") {
-            grounded = false;
+            Grounded = false;
             //rb.AddForce();
-            rb.drag = 0;
+            RigidBody.drag = 0;
 
-            if(controller != null && rb.velocity.magnitude <= 5) {
-                Vector3 force = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (controller.moveSpeed * (controller.walkSpeedMod * 10f));
+            if(PlayerController != null && RigidBody.velocity.magnitude <= 5) {
+                //Vector3 force = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (PlayerController.moveSpeed * (PlayerController.walkSpeedMod * 10f));
                 //Debug.Log("Force: " + force.x + " | " + force.y + " | " + force.z);
-                rb.AddForce(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (controller.moveSpeed * (controller.walkSpeedMod * 10f)));
+                RigidBody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (PlayerController.moveSpeed * (PlayerController.walkSpeedMod * 10f)));
             } else {
-                rb.AddForce(rb.velocity);
+                RigidBody.AddForce(RigidBody.velocity);
             }
         }
     }

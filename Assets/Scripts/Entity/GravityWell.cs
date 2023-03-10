@@ -15,15 +15,15 @@ public class GravityWell : MonoBehaviour
 
     private void FixedUpdate() {
         foreach(Entity entity in entities) {
-            if(!entity.grounded) {
+            if(!entity.Grounded) {
                 //entity.rb.AddForce((entity.transform.position - transform.position) * -g);
                 float force = -g;
                 float distance = Vector3.Distance(entity.transform.position, transform.position);
                 if(inverseSquare) {
                     force = (-g * ( (Mathf.Pow(transform.localScale.x,2)) / (Mathf.Pow(distance,2) ) ) );
-                    entity.rb.AddForce((entity.transform.position - transform.position) * force );
+                    entity.RigidBody.AddForce((entity.transform.position - transform.position) * force );
                 } else {
-                    entity.rb.AddForce((entity.transform.position - transform.position) * force );
+                    entity.RigidBody.AddForce((entity.transform.position - transform.position) * force );
                 }
 
                 //Debug.Log(entity.gameObject.name + " force: " + force + " | distance: " + distance);

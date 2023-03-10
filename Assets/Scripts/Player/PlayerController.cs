@@ -5,9 +5,7 @@ using TMPro;
 
 public class PlayerController : Controllable
 {
-    private Rigidbody2D rb;
     private SpriteRenderer playerSprite;
-
     private Vehicle currentVehicle = null;
     private bool grounded = true;
     [HideInInspector]
@@ -23,9 +21,9 @@ public class PlayerController : Controllable
         base.Start();
         Posess();
 
-        if(!TryGetComponent<Rigidbody2D>(out rb))
+        if(!TryGetComponent<Rigidbody2D>(out _rigidBody))
         {
-            rb = gameObject.AddComponent<Rigidbody2D>();
+            RigidBody = gameObject.AddComponent<Rigidbody2D>();
         }
 
         // TODO Jank, need to ensure reference to sprite
@@ -50,8 +48,8 @@ public class PlayerController : Controllable
         //Debug.Log("Movement: " + Input.GetAxisRaw("Horizontal") + " | " + Input.GetAxisRaw("Vertical"));
         coordinates.text = transform.position.x.ToString("#.##") + " | " + transform.position.y.ToString("#.##");
         if(currentVehicle) {
-            if(currentVehicle.rb.velocity.magnitude > 0) {
-                speed.text = currentVehicle.rb.velocity.magnitude.ToString("#.##");
+            if(currentVehicle.RigidBody.velocity.magnitude > 0) {
+                speed.text = currentVehicle.RigidBody.velocity.magnitude.ToString("#.##");
             } else {
                 speed.text = "0.00";
             }
@@ -64,7 +62,7 @@ public class PlayerController : Controllable
             transform.localPosition = transform.localPosition + (direction * (moveSpeed / walkSpeedMod));
         }
         else {
-            rb.AddForce(direction * moveSpeed);
+            RigidBody.AddForce(direction * moveSpeed);
         }
     }
 
@@ -80,7 +78,7 @@ public class PlayerController : Controllable
             currentVehicle = vehicle;
             transform.position = vehicle.transform.position;
             transform.parent = vehicle.transform;
-            rb.simulated = false;
+            RigidBody.simulated = false;
             playerSprite.enabled = false;
             vehicle.Posess();
             posessed = false;
@@ -92,11 +90,11 @@ public class PlayerController : Controllable
         if(currentVehicle != null) {
             transform.position = currentVehicle.dismountAnchor.position;
             transform.parent = null;
-            rb.simulated = true;
+            RigidBody.simulated = true;
             if(currentStation) {
-                rb.velocity = currentVehicle.rb.velocity + currentStation.rb.velocity;
+                RigidBody.velocity = currentVehicle.RigidBody.velocity + currentStation.RigidBody.velocity;
             } else {
-                rb.velocity = currentVehicle.rb.velocity;
+                RigidBody.velocity = currentVehicle.RigidBody.velocity;
             }
             playerSprite.enabled = true;
             currentVehicle.UnPosess();

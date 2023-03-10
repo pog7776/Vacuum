@@ -14,6 +14,17 @@ public class Controllable : MonoBehaviour
 
     protected CameraController cameraController;
 
+    protected Rigidbody2D _rigidBody;
+
+    public Rigidbody2D RigidBody { get => _rigidBody; protected set => _rigidBody = value; }
+
+    private void Awake() {
+        if(!TryGetComponent<Rigidbody2D>(out _rigidBody))
+        {
+            RigidBody = gameObject.AddComponent<Rigidbody2D>();
+        }
+    }
+
     // Start is called before the first frame update
     protected virtual void Start() {
         cameraController = Camera.main.GetComponent<CameraController>();

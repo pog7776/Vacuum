@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Vehicle : Controllable
 {
-    public Rigidbody2D rb;
     private float strafeMod = 0.5f;
 
     [SerializeField]
@@ -16,9 +15,9 @@ public class Vehicle : Controllable
     protected override void Start() {
         base.Start();
 
-        if(!TryGetComponent<Rigidbody2D>(out rb))
+        if(!TryGetComponent<Rigidbody2D>(out _rigidBody))
         {
-            rb = gameObject.AddComponent<Rigidbody2D>();
+            RigidBody = gameObject.AddComponent<Rigidbody2D>();
         }
 
         if(dismountAnchor == null) {
@@ -54,8 +53,8 @@ public class Vehicle : Controllable
 
     protected override void Move(Vector3 direction) {
         //rb.AddForce((Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position) * (moveSpeed * direction.y));
-        rb.AddForce(transform.up * (moveSpeed * direction.y));
-        rb.AddRelativeForce(new Vector3(direction.x, 0, 0) * (moveSpeed * strafeMod));
+        RigidBody.AddForce(transform.up * (moveSpeed * direction.y));
+        RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (moveSpeed * strafeMod));
     }
 
     public override void Posess() {
@@ -69,7 +68,7 @@ public class Vehicle : Controllable
 
     private void ZoomOnVelocity() {
         //Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, 10 + (rb.velocity.magnitude / 2), Time.deltaTime);
-        cameraController.TargetSize = 30 + (rb.velocity.magnitude / 2);
+        cameraController.TargetSize = 30 + (RigidBody.velocity.magnitude / 2);
         if(cameraController.ZoomSpeed != 1) {
             cameraController.ZoomSpeed = 1;
         }
@@ -80,7 +79,7 @@ public class Vehicle : Controllable
         Quaternion targetRotation = Quaternion.Euler(0, 0, Controllable.AngleBetween(transform.position, position));
         targetRotation.eulerAngles += lookatOffset;
         //transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * turnSpeed);
-        rb.MoveRotation(Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * turnSpeed));
+        RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * turnSpeed));
         //rb.MoveRotation(targetRotation);
         //rb.MoveRotation(Quaternion.Lerp(Quaternion.Euler(0,0,rb.rotation), targetRotation, Time.fixedDeltaTime * turnSpeed));
     }
