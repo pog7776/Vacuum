@@ -32,15 +32,10 @@ public class Station : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    private void FixedUpdate() {
         Vector3 velocity = transform.position - lastPosition;
         foreach(Entity entity in entities) {
-            //entity.rb.velocity = rb.velocity;
-            //entity.transform.Translate(rb.velocity, transform);
             entity.transform.Translate(velocity, transform);
+            //entity.transform.position += velocity;
         }
 
         lastPosition = transform.position;

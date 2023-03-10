@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         // TODO Can put a bool that is set when target size changes so this isn't always called
         LerpToSize();
