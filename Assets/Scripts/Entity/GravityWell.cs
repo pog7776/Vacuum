@@ -13,17 +13,6 @@ public class GravityWell : MonoBehaviour
 
     private List<Entity> entities = new List<Entity>();
 
-
-    // Start is called before the first frame update
-    void Start() {
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
-        
-    }
-
     private void FixedUpdate() {
         foreach(Entity entity in entities) {
             if(!entity.grounded) {

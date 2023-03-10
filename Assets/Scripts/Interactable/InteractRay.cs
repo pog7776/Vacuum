@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractRay : MonoBehaviour {
-
     #region Public Variables
     public Transform raycastOrigin;
     public float rayDistance = 20f;
@@ -17,7 +16,7 @@ public class InteractRay : MonoBehaviour {
     #region Private Variables
     private Ray ray;
     private List<RaycastHit2D> hit;
-    private Interactable interactable;
+    private Interactable currentInteractable;
 
     #endregion
 
@@ -41,35 +40,30 @@ public class InteractRay : MonoBehaviour {
         HandleInteractable();
     }
 
-    void FixedUpdate() {
-        
-    }
-
     private void HandleInteractable() {
-        Interactable previousInteractable = interactable;
+        Interactable previousInteractable = currentInteractable;
 
         // Cast Ray
         //if(Physics.Raycast(ray, out hit, rayDistance)) {
         if(Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(0,0,1), contactFilter, hit, rayDistance) > 0) {
-
             // If new Object
             if(previousInteractable == null || hit[0].collider.gameObject != previousInteractable.gameObject) {
-                if(hit[0].collider.gameObject.TryGetComponent<Interactable>(out interactable)) {
+                if(hit[0].collider.gameObject.TryGetComponent<Interactable>(out currentInteractable)) {
                     // Invoke OnEnter Events
-                    interactable?.InvokeOnEnter();
+                    currentInteractable?.InvokeOnEnter();
                     // Invoke OnExit Events
                     previousInteractable?.InvokeOnExit();
                 }
                 else {
                     // Set null if no interactable found
-                    interactable = null;
+                    currentInteractable = null;
                     previousInteractable?.InvokeOnExit();
                 }
             }
         }
         else {
             // Set to null if no object found
-            interactable = null;
+            currentInteractable = null;
             previousInteractable?.InvokeOnExit();
         }
 
@@ -78,16 +72,15 @@ public class InteractRay : MonoBehaviour {
         // }
 
         if(Input.GetMouseButtonDown(0)) {
-            interactable?.Interact();
+            currentInteractable?.Interact();
         }
 
         // Invoke OnHover Events
-        interactable?.InvokeOnHover();
+        currentInteractable?.InvokeOnHover();
     }
 
     private void OnDrawGizmos() {
-        Gizmos.color = interactable ? Color.green : Color.red;
+        Gizmos.color = currentInteractable ? Color.green : Color.red;
         Gizmos.DrawRay(ray.origin, ray.direction * rayDistance);
     }
-
 }

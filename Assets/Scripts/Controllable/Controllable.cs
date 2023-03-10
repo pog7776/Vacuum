@@ -14,7 +14,6 @@ public class Controllable : MonoBehaviour
 
     protected CameraController cameraController;
 
-
     // Start is called before the first frame update
     protected virtual void Start() {
         cameraController = Camera.main.GetComponent<CameraController>();
