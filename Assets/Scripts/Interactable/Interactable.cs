@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour {
     [SerializeField]
+    private bool debug = false;
+
+    [SerializeField]
     private UnityEvent _onInteract;
     public UnityEvent OnInteract
     {
@@ -33,22 +36,22 @@ public class Interactable : MonoBehaviour {
     }
 
     public void Interact() {
-        Debug.Log(gameObject.name + " Interact");
+        if(debug) Debug.Log(gameObject.name + " Interact");
         OnInteract?.Invoke();
     }
 
     public void InvokeOnEnter() {
-        Debug.Log(gameObject.name + " OnEnter");
+        if(debug) Debug.Log(gameObject.name + " OnEnter");
         OnHoverEnter?.Invoke();
     }
 
     public void InvokeOnExit() {
-        Debug.Log(gameObject.name + " OnExit");
+        if(debug) Debug.Log(gameObject.name + " OnExit");
         OnHoverExit?.Invoke();
     }
 
     public void InvokeOnHover() {
-        //Debug.Log(gameObject.name + " OnHover");
+        //if(debug) Debug.Log(gameObject.name + " OnHover");
         OnHover?.Invoke();
     }
 }

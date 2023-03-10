@@ -9,11 +9,15 @@ public class Station : MonoBehaviour
     private List<Entity> entities;
 
     private Vector3 lastPosition;
+    private Vector3 _localVelocity;
 
     [SerializeField]
     private Vector3 initialImpulse;
+    [SerializeField]
+    private bool debug = false;
 
     public Rigidbody2D RigidBody { get => _rigidBody; protected set => _rigidBody = value; }
+    public Vector3 LocalVelocity { get => _localVelocity; set => _localVelocity = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -29,15 +33,16 @@ public class Station : MonoBehaviour
         }
 
         RigidBody.AddForce(initialImpulse);
+        LocalVelocity = transform.position - lastPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 velocity = transform.position - lastPosition;
+        LocalVelocity = transform.position - lastPosition;
         foreach(Entity entity in entities) {
-            entity.transform.Translate(velocity, transform);
-            //entity.transform.position += velocity;
+            entity.transform.Translate(LocalVelocity, transform);
+            //entity.transform.position += LocalVelocity;
         }
 
         lastPosition = transform.position;
@@ -51,7 +56,7 @@ public class Station : MonoBehaviour
             entity.RigidBody.velocity = entity.RigidBody.velocity - RigidBody.velocity;
         }
 
-        Debug.Log("Entered influence of " + gameObject.name);
+        if(debug) Debug.Log("Entered influence of " + gameObject.name);
     }
 
     private void OnTriggerExit2D(Collider2D other) {
@@ -61,6 +66,6 @@ public class Station : MonoBehaviour
             entity.RigidBody.velocity = entity.RigidBody.velocity + RigidBody.velocity;
         }
 
-        Debug.Log("Left influence of " + gameObject.name);
+        if(debug) Debug.Log("Left influence of " + gameObject.name);
     }
 }

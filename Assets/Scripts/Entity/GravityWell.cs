@@ -8,9 +8,9 @@ public class GravityWell : MonoBehaviour
     //private Collider2D gravityInfluence;
     [SerializeField]
     private bool inverseSquare = true;
-
     public float g = 0.5f;
-
+    [SerializeField]
+    private bool debug = false;
     private List<Entity> entities = new List<Entity>();
 
     private void FixedUpdate() {
@@ -44,7 +44,7 @@ public class GravityWell : MonoBehaviour
             }
         }
 
-        Debug.Log("Entered influence of " + gameObject.name);
+        if(debug) Debug.Log("Entered influence of " + gameObject.name);
     }
 
     private void OnTriggerExit2D(Collider2D other) {
@@ -56,6 +56,6 @@ public class GravityWell : MonoBehaviour
         entity = entities.Find(element => element.gameObject == other.gameObject);
         entities.Remove(entity);
 
-        Debug.Log("Left influence of " + gameObject.name);
+        if(debug) Debug.Log("Left influence of " + gameObject.name);
     }
 }

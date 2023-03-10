@@ -3760,6 +3760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10fb806d393482e43b540cd3b9d1f5ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
   _onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -3816,9 +3817,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 20
   lookatOffset: {x: 0, y: 0, z: -90}
-  rb: {fileID: 0}
   turnSpeed: 3
   dismountAnchor: {fileID: 1031673585}
+  currentStation: {fileID: 0}
 --- !u!60 &143589115
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -3916,9 +3917,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b25a13b3b589a44aa2945dbb9af0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   grounded: 1
   groundedDrag: 2
+  flightDrag: 0
+  groundedAngularDrag: 1
+  flightAngularDrag: 0
 --- !u!1 &145654670
 GameObject:
   m_ObjectHideFlags: 0
@@ -4497,9 +4500,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b25a13b3b589a44aa2945dbb9af0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   grounded: 1
   groundedDrag: 10
+  flightDrag: 0
+  groundedAngularDrag: 1
+  flightAngularDrag: 0
 --- !u!1 &159061383
 GameObject:
   m_ObjectHideFlags: 0
@@ -8273,6 +8278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverseSquare: 1
   g: 1
+  debug: 0
 --- !u!58 &383183500
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -16506,9 +16512,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4b25a13b3b589a44aa2945dbb9af0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   grounded: 0
   groundedDrag: 1
+  flightDrag: 0
+  groundedAngularDrag: 1
+  flightAngularDrag: 0
 --- !u!114 &826203411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16521,8 +16529,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e324d1c67a616a4e96c285c02205388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   initialImpulse: {x: 0, y: 800, z: 0}
+  debug: 0
 --- !u!50 &826203412
 Rigidbody2D:
   serializedVersion: 4
@@ -24149,6 +24157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverseSquare: 1
   g: 2.5
+  debug: 0
 --- !u!58 &1043146800
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -30478,6 +30487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inverseSquare: 1
   g: 0.5
+  debug: 0
 --- !u!58 &1340137743
 CircleCollider2D:
   m_ObjectHideFlags: 0

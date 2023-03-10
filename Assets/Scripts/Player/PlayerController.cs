@@ -76,6 +76,7 @@ public class PlayerController : Controllable
     {
         if(currentVehicle == null) {
             currentVehicle = vehicle;
+            // TODO seat anchor position on the vehicle
             transform.position = vehicle.transform.position;
             transform.parent = vehicle.transform;
             RigidBody.simulated = false;
@@ -91,8 +92,8 @@ public class PlayerController : Controllable
             transform.position = currentVehicle.dismountAnchor.position;
             transform.parent = null;
             RigidBody.simulated = true;
-            if(currentStation) {
-                RigidBody.velocity = currentVehicle.RigidBody.velocity + currentStation.RigidBody.velocity;
+            if(currentVehicle.currentStation) {
+                RigidBody.velocity = currentVehicle.currentStation.RigidBody.velocity;
             } else {
                 RigidBody.velocity = currentVehicle.RigidBody.velocity;
             }
@@ -109,7 +110,10 @@ public class PlayerController : Controllable
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Gravity") {
             grounded = true;
-            currentStation = other.gameObject.GetComponent<Station>();
+
+            if(!other.gameObject.TryGetComponent<Station>(out currentStation)) {
+                currentStation = other.gameObject.GetComponentInParent<Station>();
+            }
 
             // if(other.gameObject.TryGetComponent<Station>(out currentStation)) {
 
@@ -127,7 +131,10 @@ public class PlayerController : Controllable
             //     rb.AddForce(rb.velocity);
             // }
 
-            if(currentStation != null && currentStation.gameObject == other.gameObject) {
+            // TODO Really need to figure this out
+            // If a station is within another station
+            // There was another issue i saw but i cant think of it right now
+            if(currentStation != null) { //&& currentStation.gameObject == other.gameObject) {
                 currentStation = null;
             }
         }

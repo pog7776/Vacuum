@@ -12,12 +12,22 @@ public class Entity : MonoBehaviour
 
     [SerializeField]
     private float groundedDrag = 1;
+    [SerializeField]
+    private float flightDrag = 0;
+
+    [SerializeField]
+    private float groundedAngularDrag = 1f;
+    [SerializeField]
+    private float flightAngularDrag = 0.00f;
 
     private PlayerController playerController;
 
     public Rigidbody2D RigidBody { get => rigidBody; private set => rigidBody = value; }
     public bool Grounded { get => grounded; set => grounded = value; }
     public float GroundedDrag { get => groundedDrag; set => groundedDrag = value; }
+    public float FlightDrag { get => flightDrag; set => flightDrag = value; }
+    public float FlightAngularDrag { get => flightAngularDrag; set => flightAngularDrag = value; }
+    public float GroundedAngularDrag { get => groundedAngularDrag; set => groundedAngularDrag = value; }
     public PlayerController PlayerController { get => playerController; set => playerController = value; }
 
     //[SerializeField]
@@ -38,7 +48,9 @@ public class Entity : MonoBehaviour
         if(other.tag == "Gravity") {
             Grounded = true;
             //rb.velocity = Vector3.zero;
+
             RigidBody.drag = GroundedDrag;
+            RigidBody.angularDrag = GroundedAngularDrag;
         }
     }
 
@@ -46,7 +58,8 @@ public class Entity : MonoBehaviour
         if(other.tag == "Gravity") {
             Grounded = false;
             //rb.AddForce();
-            RigidBody.drag = 0;
+            RigidBody.drag = FlightDrag;
+            RigidBody.angularDrag = FlightAngularDrag;
 
             if(PlayerController != null && RigidBody.velocity.magnitude <= 5) {
                 //Vector3 force = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (PlayerController.moveSpeed * (PlayerController.walkSpeedMod * 10f));

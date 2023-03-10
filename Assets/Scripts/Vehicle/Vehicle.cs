@@ -11,6 +11,9 @@ public class Vehicle : Controllable
 
     public Transform dismountAnchor;
 
+    [HideInInspector]
+    public Station currentStation;
+
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
@@ -82,5 +85,21 @@ public class Vehicle : Controllable
         RigidBody.MoveRotation(Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * turnSpeed));
         //rb.MoveRotation(targetRotation);
         //rb.MoveRotation(Quaternion.Lerp(Quaternion.Euler(0,0,rb.rotation), targetRotation, Time.fixedDeltaTime * turnSpeed));
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag == "Gravity") {
+            if(!other.gameObject.TryGetComponent<Station>(out currentStation)) {
+                currentStation = other.gameObject.GetComponentInParent<Station>();
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        if(other.tag == "Gravity") {
+            if(currentStation != null) {
+                currentStation = null;
+            }
+        }
     }
 }
