@@ -27,15 +27,6 @@ public class Entity : MonoBehaviour
         controller = GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
-    void Update() {
-        
-    }
-
-    private void FixedUpdate() {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag == "Gravity") {
             grounded = true;
