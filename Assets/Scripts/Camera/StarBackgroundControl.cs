@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StarBackgroundControl : MonoBehaviour {
-    private SpriteRenderer renderer;
+    private SpriteRenderer spriteRenderer;
     private Material material;
     private Shader starShader;
 
@@ -11,9 +11,9 @@ public class StarBackgroundControl : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        renderer = gameObject.GetComponent<SpriteRenderer>();
-        material = renderer.material;
-        starShader = renderer.material.shader;
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        material = spriteRenderer.material;
+        starShader = spriteRenderer.material.shader;
     }
 
     // Update is called once per frame

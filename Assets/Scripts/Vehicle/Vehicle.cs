@@ -14,6 +14,9 @@ public class Vehicle : Controllable
     [HideInInspector]
     public Station currentStation;
 
+    [SerializeField]
+    private float dockedMass = 50f;
+
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
@@ -60,14 +63,17 @@ public class Vehicle : Controllable
         RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (moveSpeed * strafeMod));
     }
 
-    // public override void Posess() {
-    //     posessed = true;
-    // }
+    public override void Posess() {
+        base.Posess();
+        RigidBody.mass = 1;
+    }
 
-    // public override void UnPosess() {
-    //     posessed = false;
-    //     //rb.velocity = Vector3.zero;
-    // }
+    public override void UnPosess() {
+        base.UnPosess();
+        if(currentStation) {
+            RigidBody.mass = dockedMass;
+        }
+    }
 
     private void ZoomOnVelocity() {
         //Camera.main.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, 10 + (rb.velocity.magnitude / 2), Time.deltaTime);
@@ -92,6 +98,10 @@ public class Vehicle : Controllable
             if(!other.gameObject.TryGetComponent<Station>(out currentStation)) {
                 currentStation = other.gameObject.GetComponentInParent<Station>();
             }
+
+            if(!posessed) {
+                RigidBody.mass = dockedMass;
+            }
         }
     }
 
@@ -100,6 +110,8 @@ public class Vehicle : Controllable
             if(currentStation != null) {
                 currentStation = null;
             }
+
+            RigidBody.mass = 1;
         }
     }
 }
