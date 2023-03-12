@@ -133,4 +133,12 @@ public class PlayerController : Controllable
             }
         }
     }
+
+    public void OnCameraFocus(InputValue value) {
+        if(value.Get<float>() != 0) {
+            cameraController.offsetCamera = true;
+        } else {
+            cameraController.offsetCamera = false;
+        }
+    }
 }

@@ -83,12 +83,4 @@ public class Controllable : MonoBehaviour
     public virtual void UnPosess() {
         posessed = false;
     }
-
-    public void OnCameraFocus(InputValue value) {
-        if(posessed && value.Get<float>() != 0) {
-            cameraController.offsetCamera = true;
-        } else {
-            cameraController.offsetCamera = false;
-        }
-    }
 }

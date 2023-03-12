@@ -77,8 +77,8 @@ public class CameraController : MonoBehaviour
                 Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
                 Vector3 dir = (newPos - mousePos).normalized;
                 Vector2 camCenter = new Vector2(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
-                float power = Vector2.Distance(Mouse.current.position.ReadValue(), camCenter);
-                newPos -= Vector3.ClampMagnitude(dir * power/100, 5);
+                float power = Vector2.Distance(Mouse.current.position.ReadValue(), camCenter) / 100;
+                newPos -= Vector3.ClampMagnitude(dir * power, 5);
                 //cam.transform.position = Vector3.Slerp(cam.transform.position, -newPos, Time.fixedDeltaTime);
             }
 
