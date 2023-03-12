@@ -64,7 +64,8 @@ public class Entity : MonoBehaviour
             if(PlayerController != null && RigidBody.velocity.magnitude <= 5) {
                 //Vector3 force = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (PlayerController.moveSpeed * (PlayerController.walkSpeedMod * 10f));
                 //Debug.Log("Force: " + force.x + " | " + force.y + " | " + force.z);
-                RigidBody.AddForce(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * (PlayerController.moveSpeed * (PlayerController.walkSpeedMod * 10f)));
+
+                RigidBody.AddForce(playerController.MoveDirection * (PlayerController.moveSpeed * (PlayerController.walkSpeedMod * 10f)));
             } else {
                 RigidBody.AddForce(RigidBody.velocity);
             }

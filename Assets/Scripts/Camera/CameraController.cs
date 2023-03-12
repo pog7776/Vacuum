@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
@@ -34,6 +35,14 @@ public class CameraController : MonoBehaviour
         set => _followTarget = value;
     }
 
+    private Vector3 _offsetPosition;
+    public Vector3 OffsetPosition {
+        get => _offsetPosition;
+        set => _offsetPosition = new Vector3(value.x, value.y, transform.position.z);
+    }
+
+    public bool OffsetCamera = false;
+
     private Camera cam;
 
     // Start is called before the first frame update
@@ -43,7 +52,7 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void LateUpdate() // late or fixed update?
     {
         // TODO Can put a bool that is set when target size changes so this isn't always called
         LerpToSize();
@@ -61,6 +70,11 @@ public class CameraController : MonoBehaviour
         // Implement lerp or bool to toggle lerp to target?
         if(FollowTarget) {
             Vector3 newPos = new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y, cam.transform.position.z);
+            // Vector3 newDir = (newPos - Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()).normalized);
+            // if(OffsetCamera) {
+            //     //Debug.Log(newDir);
+            //     newPos = (newPos + (newDir * 5)) / 2;
+            // }
             cam.transform.position = newPos;
         }
     }

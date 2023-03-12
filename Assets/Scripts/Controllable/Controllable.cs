@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Controllable : MonoBehaviour
 {
@@ -16,7 +17,10 @@ public class Controllable : MonoBehaviour
 
     protected Rigidbody2D _rigidBody;
 
+    private Vector2 moveDirection = Vector2.zero;
+
     public Rigidbody2D RigidBody { get => _rigidBody; protected set => _rigidBody = value; }
+    public Vector2 MoveDirection { get => moveDirection; protected set => moveDirection = value; }
 
     private void Awake() {
         if(!TryGetComponent<Rigidbody2D>(out _rigidBody))
@@ -33,33 +37,23 @@ public class Controllable : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update() {
         if(posessed) {
-            LookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            LookAt(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()));
             //LockCamera(Camera.main);
         }
     }
 
     protected virtual void FixedUpdate() {
-        if(posessed && IsMoveInput())
-        {
-            Move(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"),0));
+        if(posessed) {
+            Move(MoveDirection);
         }
     }
+
+    public void OnMove(InputValue value) => MoveDirection = value.Get<Vector2>();
 
     protected virtual void Move(Vector3 direction)
     {
         transform.localPosition = transform.localPosition + (direction * (moveSpeed / 10f));
     }
-
-    // Needs to be handeled by the camera so
-    // multiple objects can't be the target
-    // protected virtual void LockCamera(Camera camera)
-    // {
-    //     Vector3 newPos = new Vector3(transform.position.x, transform.position.y, camera.transform.position.z);
-    //     camera.transform.position = newPos;
-    // }
-
-    // TODO Need to move to new input system and not do this every frame crap
-    protected virtual bool IsMoveInput() => (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0);
 
     protected virtual void LookAt(Vector3 position)
     {
@@ -85,4 +79,18 @@ public class Controllable : MonoBehaviour
     public virtual void UnPosess() {
         posessed = false;
     }
+
+    // public void OnCameraFocus(InputValue value) {
+    //     // Debug.Log("value: " + value.Get<float>());
+    //     // if(value.Get<float>() != 0) {
+    //     //     cameraController.OffsetPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+    //     // } else {
+    //     //     cameraController.OffsetPosition = Vector3.zero;
+    //     // }
+    //     if(value.Get<float>() != 0) {
+    //         cameraController.OffsetCamera = true;
+    //     } else {
+    //         cameraController.OffsetCamera = false;
+    //     }
+    // }
 }

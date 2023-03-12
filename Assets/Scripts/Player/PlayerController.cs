@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class PlayerController : Controllable
 {
@@ -34,11 +35,6 @@ public class PlayerController : Controllable
     protected override void Update()
     {
         base.Update();
-        
-        // TODO Move to input controller
-        if(Input.GetKeyDown(KeyCode.E) && currentVehicle != null) {
-            ExitVehicle();
-        }
     }
 
     protected override void FixedUpdate()
@@ -86,6 +82,8 @@ public class PlayerController : Controllable
         }
     }
 
+    public void OnExitVehicle(InputValue value) => ExitVehicle();
+
     public void ExitVehicle()
     {
         if(currentVehicle != null) {
@@ -114,10 +112,6 @@ public class PlayerController : Controllable
             if(!other.gameObject.TryGetComponent<Station>(out currentStation)) {
                 currentStation = other.gameObject.GetComponentInParent<Station>();
             }
-
-            // if(other.gameObject.TryGetComponent<Station>(out currentStation)) {
-
-            // }
         }
     }
 
