@@ -78,6 +78,7 @@ public class PlayerController : Controllable
             RigidBody.simulated = false;
             playerSprite.enabled = false;
             vehicle.Posess();
+            cameraController.FollowTarget = currentVehicle.gameObject;
             UnPosess();
         }
     }
@@ -102,6 +103,7 @@ public class PlayerController : Controllable
 
             cameraController.TargetSize = 10;
             cameraController.ZoomSpeed = 2;
+            cameraController.FollowTarget = gameObject;
         }
     }
 
@@ -137,13 +139,17 @@ public class PlayerController : Controllable
     public void OnCameraFocus(InputValue value) {
         if(value.Get<float>() != 0) {
             cameraController.offsetCamera = true;
+
+            cameraController.FixCamType = FixCamMode.FixedUpdate;
             
             // This is a mess ♥
-            if(grounded || currentVehicle.currentStation) {
-                cameraController.FixCamType = FixCamMode.FixedUpdate;    
-            } else {
-                cameraController.FixCamType = FixCamMode.NormalUpdate;
-            }
+            // Turns out i wasnt setting the ship to the follow target
+            // So don't need the NormalUpdate
+            // if(grounded || currentVehicle.currentStation) {
+            //     cameraController.FixCamType = FixCamMode.FixedUpdate;    
+            // } else {
+            //     cameraController.FixCamType = FixCamMode.NormalUpdate;
+            // }
 
         } else {
             cameraController.offsetCamera = false;
