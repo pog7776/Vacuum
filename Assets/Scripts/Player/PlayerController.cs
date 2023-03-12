@@ -137,8 +137,17 @@ public class PlayerController : Controllable
     public void OnCameraFocus(InputValue value) {
         if(value.Get<float>() != 0) {
             cameraController.offsetCamera = true;
+            
+            // This is a mess ♥
+            if(grounded || currentVehicle.currentStation) {
+                cameraController.FixCamType = FixCamMode.FixedUpdate;    
+            } else {
+                cameraController.FixCamType = FixCamMode.NormalUpdate;
+            }
+
         } else {
             cameraController.offsetCamera = false;
+            cameraController.FixCamType = FixCamMode.LateUpdate;
         }
     }
 }

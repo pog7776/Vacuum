@@ -35,7 +35,14 @@ public class CameraController : MonoBehaviour
         set => _followTarget = value;
     }
 
+    [HideInInspector]
     public bool offsetCamera = false;
+
+    private FixCamMode _fixCamType;
+    public FixCamMode FixCamType {
+        get => _fixCamType;
+        set => _fixCamType = value;
+    }
 
     private Camera cam;
 
@@ -50,13 +57,19 @@ public class CameraController : MonoBehaviour
     {
         // TODO Can put a bool that is set when target size changes so this isn't always called
         LerpToSize();
-        if(!offsetCamera) {
+        if(FixCamType == FixCamMode.LateUpdate) {
             LockCamera();
         }
     }
 
     private void FixedUpdate() {
-        if(offsetCamera) {
+        if(FixCamType == FixCamMode.FixedUpdate) {
+            LockCamera();
+        }
+    }
+
+    private void Update() {
+        if(FixCamType == FixCamMode.NormalUpdate) {
             LockCamera();
         }
     }
@@ -85,4 +98,10 @@ public class CameraController : MonoBehaviour
             cam.transform.position = newPos;
         }
     }
+}
+
+public enum FixCamMode {
+    FixedUpdate,
+    LateUpdate,
+    NormalUpdate
 }
