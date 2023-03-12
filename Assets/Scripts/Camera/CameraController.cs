@@ -35,13 +35,7 @@ public class CameraController : MonoBehaviour
         set => _followTarget = value;
     }
 
-    private Vector3 _offsetPosition;
-    public Vector3 OffsetPosition {
-        get => _offsetPosition;
-        set => _offsetPosition = new Vector3(value.x, value.y, transform.position.z);
-    }
-
-    public bool OffsetCamera = false;
+    public bool offsetCamera = false;
 
     private Camera cam;
 
@@ -56,7 +50,15 @@ public class CameraController : MonoBehaviour
     {
         // TODO Can put a bool that is set when target size changes so this isn't always called
         LerpToSize();
-        LockCamera();
+        if(!offsetCamera) {
+            LockCamera();
+        }
+    }
+
+    private void FixedUpdate() {
+        if(offsetCamera) {
+            LockCamera();
+        }
     }
 
     private void LerpToSize() {
@@ -70,11 +72,16 @@ public class CameraController : MonoBehaviour
         // Implement lerp or bool to toggle lerp to target?
         if(FollowTarget) {
             Vector3 newPos = new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y, cam.transform.position.z);
-            // Vector3 newDir = (newPos - Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()).normalized);
-            // if(OffsetCamera) {
-            //     //Debug.Log(newDir);
-            //     newPos = (newPos + (newDir * 5)) / 2;
-            // }
+
+            if(offsetCamera) {
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                Vector3 dir = (newPos - mousePos).normalized;
+                Vector2 camCenter = new Vector2(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
+                float power = Vector2.Distance(Mouse.current.position.ReadValue(), camCenter);
+                newPos -= Vector3.ClampMagnitude(dir * power/100, 5);
+                //cam.transform.position = Vector3.Slerp(cam.transform.position, -newPos, Time.fixedDeltaTime);
+            }
+
             cam.transform.position = newPos;
         }
     }

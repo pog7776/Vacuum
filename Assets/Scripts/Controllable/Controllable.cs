@@ -45,6 +45,10 @@ public class Controllable : MonoBehaviour
     protected virtual void FixedUpdate() {
         if(posessed) {
             Move(MoveDirection);
+
+            // Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            // Vector3 dir = (transform.position - mousePos).normalized;
+            // Debug.DrawLine(transform.position, transform.position - (dir * 2), Color.magenta);
         }
     }
 
@@ -80,17 +84,11 @@ public class Controllable : MonoBehaviour
         posessed = false;
     }
 
-    // public void OnCameraFocus(InputValue value) {
-    //     // Debug.Log("value: " + value.Get<float>());
-    //     // if(value.Get<float>() != 0) {
-    //     //     cameraController.OffsetPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-    //     // } else {
-    //     //     cameraController.OffsetPosition = Vector3.zero;
-    //     // }
-    //     if(value.Get<float>() != 0) {
-    //         cameraController.OffsetCamera = true;
-    //     } else {
-    //         cameraController.OffsetCamera = false;
-    //     }
-    // }
+    public void OnCameraFocus(InputValue value) {
+        if(posessed && value.Get<float>() != 0) {
+            cameraController.offsetCamera = true;
+        } else {
+            cameraController.offsetCamera = false;
+        }
+    }
 }
