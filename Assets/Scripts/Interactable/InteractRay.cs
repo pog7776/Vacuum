@@ -32,7 +32,7 @@ public class InteractRay : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
         // Update Raycast
         //ray = new Ray(raycastOrigin.position, raycastOrigin.forward);
         ray = new Ray(Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()), new Vector3(0,0,rayDistance));

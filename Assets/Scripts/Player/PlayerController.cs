@@ -13,6 +13,8 @@ public class PlayerController : Controllable
     public Station currentStation;
     public float walkSpeedMod = 10f;
 
+    public FixCamMode defaultCamMode = FixCamMode.LateUpdate;
+
     public TMP_Text coordinates;
     public TMP_Text speed;
 
@@ -55,6 +57,7 @@ public class PlayerController : Controllable
     protected override void Move(Vector3 direction)
     {
         if(grounded) {
+            // TODO Clamp magnitude?
             transform.localPosition = transform.localPosition + (direction * (moveSpeed / walkSpeedMod));
         }
         else {
@@ -133,6 +136,7 @@ public class PlayerController : Controllable
             if(currentStation != null) { //&& currentStation.gameObject == other.gameObject) {
                 currentStation = null;
             }
+            cameraController.FixCamType = defaultCamMode;
         }
     }
 
@@ -153,7 +157,7 @@ public class PlayerController : Controllable
 
         } else {
             cameraController.offsetCamera = false;
-            cameraController.FixCamType = FixCamMode.LateUpdate;
+            cameraController.FixCamType = defaultCamMode;
         }
     }
 }

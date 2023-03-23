@@ -38,7 +38,8 @@ public class CameraController : MonoBehaviour
     [HideInInspector]
     public bool offsetCamera = false;
 
-    private FixCamMode _fixCamType;
+    [SerializeField]
+    private FixCamMode _fixCamType = FixCamMode.LateUpdate;
     public FixCamMode FixCamType {
         get => _fixCamType;
         set => _fixCamType = value;

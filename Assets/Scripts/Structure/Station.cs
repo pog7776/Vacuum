@@ -19,8 +19,7 @@ public class Station : MonoBehaviour
     public Rigidbody2D RigidBody { get => _rigidBody; protected set => _rigidBody = value; }
     public Vector3 LocalVelocity { get => _localVelocity; set => _localVelocity = value; }
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         lastPosition = transform.position;
 

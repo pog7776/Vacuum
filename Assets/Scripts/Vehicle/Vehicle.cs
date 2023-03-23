@@ -17,6 +17,8 @@ public class Vehicle : Controllable
     [SerializeField]
     private float dockedMass = 50f;
 
+    private Dictionary<ModuleType, List<IModule>> modules;
+
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
@@ -32,6 +34,8 @@ public class Vehicle : Controllable
             dismountAnchor.name = "GeneratedDismountAnchor";
             dismountAnchor.transform.localPosition = new Vector3(-1, 0, 0);
         }
+
+        modules = new Dictionary<ModuleType, List<IModule>>();
     }
 
     // Update is called once per frame
@@ -113,5 +117,60 @@ public class Vehicle : Controllable
 
             RigidBody.mass = 1;
         }
+    }
+
+    private ThrusterModule mod;
+    public void TestModule(float thrust) {
+        mod = mod == null ? new ThrusterModule() : mod;
+        mod.ThrustScale = thrust;
+        InstallModule(mod);
+    }
+
+    public void UntestModule() {
+        UninstallModule(mod);
+    }
+
+    public void InstallModule(IModule module) {
+        if(!modules.ContainsKey(module.ModuleType)) {
+            modules.Add(module.ModuleType, new List<IModule>());
+        }
+
+        if(!modules[module.ModuleType].Contains(module)) {
+            modules[module.ModuleType].Add(module);
+            module.Install(this);
+        } else {
+            Debug.LogWarning("This module is already installed");
+        }
+
+        // switch (module.ModuleType)
+        // {
+        //     case ModuleType.Thruster:
+        //         ThrusterModule mod = module as ThrusterModule;
+        //         moveSpeed *= mod.ThrustScale;
+        //         Debug.Log("Installed thruster module: " + mod.Name);
+        //         break;
+        //     default:
+        //         break;
+        // }
+    }
+
+    public void UninstallModule(IModule module) {
+        if(modules.ContainsKey(module.ModuleType)) {
+            if(modules[module.ModuleType].Contains(module)) {
+                modules[module.ModuleType].Remove(module);
+                module.Uninstall(this);
+            } else {
+                Debug.LogWarning("This module is not installed");
+            }
+        }
+
+        // switch (module.ModuleType)
+        // {
+        //     case ModuleType.Thruster:
+        //         Debug.Log("AAAAAA");
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 }
