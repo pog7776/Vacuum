@@ -72,5 +72,5 @@ public class Entity : MonoBehaviour
         }
     }
 
-    // Add gravity well to litst on entity so camera can get player and gravity bodies affecting it in frame
+    //TODO Maybe Add gravity well to litst on entity so camera can get player and gravity bodies affecting it in frame
 }

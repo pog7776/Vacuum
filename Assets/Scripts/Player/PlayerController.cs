@@ -57,11 +57,10 @@ public class PlayerController : Controllable
     protected override void Move(Vector3 direction)
     {
         if(grounded) {
-            // TODO Clamp magnitude?
-            transform.localPosition = transform.localPosition + (direction * (moveSpeed / walkSpeedMod));
+            transform.localPosition = transform.localPosition + (Vector3.ClampMagnitude(direction, 1) * (MoveSpeed / walkSpeedMod));
         }
         else {
-            RigidBody.AddForce(direction * moveSpeed);
+            RigidBody.AddForce(direction * MoveSpeed);
         }
     }
 
@@ -154,7 +153,6 @@ public class PlayerController : Controllable
             // } else {
             //     cameraController.FixCamType = FixCamMode.NormalUpdate;
             // }
-
         } else {
             cameraController.offsetCamera = false;
             cameraController.FixCamType = defaultCamMode;

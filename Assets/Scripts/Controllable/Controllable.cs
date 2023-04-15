@@ -7,6 +7,8 @@ public class Controllable : MonoBehaviour
 {
     [SerializeField]
     public float moveSpeed = 1.0f;
+    public float moveSpeedMod = 0.0f;
+    public float MoveSpeed { get => moveSpeed + moveSpeedMod; }
 
     protected bool posessed = false;
 
@@ -56,7 +58,7 @@ public class Controllable : MonoBehaviour
 
     protected virtual void Move(Vector3 direction)
     {
-        transform.localPosition = transform.localPosition + (direction * (moveSpeed / 10f));
+        transform.localPosition = transform.localPosition + (Vector3.ClampMagnitude(direction, 1) * (MoveSpeed / 10f));
     }
 
     protected virtual void LookAt(Vector3 position)
