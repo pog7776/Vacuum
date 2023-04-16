@@ -42,19 +42,19 @@ public class PowerConsumption {
     // Then have the resource subscribe to an event or action in the vehicle class that uses a resource
     public PowerSource Source { get; set; }
     public float Rate { get; set; }
-    private Vehicle _vehicle;
-    public Vehicle Vehicle {
-        get => _vehicle;
-        set {
-            if(value == null) {
-                _vehicle.AOnMove -= ConsumeResource;
-            }
-            else if(Source != PowerSource.None) {
-                value.AOnMove += ConsumeResource;
-            }
-            _vehicle = value;
-        }
-    }
+    //private Vehicle _vehicle;
+    // public Vehicle Vehicle {
+    //     get => _vehicle;
+    //     set {
+    //         if(value == null) {
+    //             _vehicle.AOnMove -= ConsumeResource;
+    //         }
+    //         else if(Source != PowerSource.None) {
+    //             value.AOnMove += ConsumeResource;
+    //         }
+    //         _vehicle = value;
+    //     }
+    // }
 
     public PowerConsumption(PowerSource source, float rate) {
         Source = source;
@@ -66,7 +66,7 @@ public class PowerConsumption {
         // }
     }
 
-    private void ConsumeResource() {
-        Vehicle.ConsumeResource(Source, Rate);
+    public void ConsumeResource(Vehicle vehicle) {
+        vehicle.ConsumeResource(Source, Rate);
     }
 }

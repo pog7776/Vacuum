@@ -14,6 +14,7 @@ public class Vehicle : Controllable
 
     [SerializeField]
     private float turnSpeed = 1f;
+    private bool afterBurnerEngaged = false;
     [SerializeField]
     private float fuelCapacity = 100;
     [SerializeField]
@@ -65,7 +66,7 @@ public class Vehicle : Controllable
         }
         
         // Install the base engine
-        EngineModule baseEngine = new EngineModule(this, PowerSource.Fuel, 0.1f);
+        EngineModule baseEngine = new EngineModule(PowerSource.Fuel, 0.1f);
         baseEngine.ThrustOutput = moveSpeed;
         InstallModule(baseEngine);
         //resources[PowerSource.Fuel].Value = resources.fuelCapacity;
@@ -78,11 +79,15 @@ public class Vehicle : Controllable
         battery.Capacity = batteryCapacity;
         InstallModule(battery);
 
-        ThrusterModule ionEngine = new ThrusterModule(this, PowerSource.Energy, 0.05f);
+        AuxThrustModule ionEngine = new AuxThrustModule(PowerSource.Energy, 0.05f);
         ionEngine.ThrustOutput = 5;
         ionEngine.PowerConsumption.Source = PowerSource.Energy;
         ionEngine.PowerConsumption.Rate = 0.05f;
         InstallModule(ionEngine);
+
+        AfterBurnerModule afterBurner = new AfterBurnerModule(PowerSource.Fuel, 0.5f);
+        afterBurner.ThrustOutput = moveSpeed;
+        InstallModule(afterBurner);
     }
 
     // Update is called once per frame
@@ -106,6 +111,9 @@ public class Vehicle : Controllable
         // }
 
         //Debug.Log("Velocity: " + rb.velocity.magnitude);
+        if(afterBurnerEngaged) {
+            AOnAfterBurner?.Invoke();
+        }
     }
 
     protected override void Move(Vector3 direction) {
@@ -113,16 +121,22 @@ public class Vehicle : Controllable
         // if(resources[PowerSource.Fuel].Value > 0) {
         //     //rb.AddForce((Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position) * (moveSpeed * direction.y));
         //     RigidBody.AddForce(transform.up * (MoveSpeed * direction.y));
-        //     RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (MoveSpeed * StrafeMod));
-
-            
+        //     RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (MoveSpeed * StrafeMod));            
         // }
+
         if(direction != Vector3.zero) {
             AOnMove?.Invoke();
         }
     }
 
-    public void OnAfterBurner(InputValue value) => AOnAfterBurner?.Invoke();
+    public void OnAfterBurner(InputValue value) {
+        if(value.Get<float>() == 1) {
+            afterBurnerEngaged = true;
+        } else {
+            afterBurnerEngaged = false;
+        }
+        //afterBurnerEngaged = value.Get<bool>();
+    }
 
     public override void Posess() {
         base.Posess();
@@ -178,7 +192,7 @@ public class Vehicle : Controllable
 
     private ThrusterModule mod;
     public void TestModule(float thrust) {
-        mod = mod == null ? new ThrusterModule(this, PowerSource.Fuel, 0.05f) : mod;
+        mod = mod == null ? new AuxThrustModule(PowerSource.Fuel, 0.05f) : mod;
         mod.ThrustOutput = thrust;
         InstallModule(mod);
     }
