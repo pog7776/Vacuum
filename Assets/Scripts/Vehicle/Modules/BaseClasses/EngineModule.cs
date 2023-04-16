@@ -22,6 +22,7 @@ public class EngineModule : ThrusterModule {
         base.OnUse();
         if(Vehicle.resources[PowerConsumption.Source].Value > 0) {
             Vehicle.RigidBody.AddForce(Vehicle.transform.up * (ThrustOutput * Vehicle.MoveDirection.y));
+            //Vehicle.RigidBody.AddRelativeForce(new Vector3(Vehicle.MoveDirection.x, 0, 0) * (ThrustOutput * Vehicle.StrafeMod));
         }
     }
 }

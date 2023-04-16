@@ -33,19 +33,13 @@ public class ResourceTankModule : IModule
         moddedTankSize = vehicle.resources[ResourceType].Capacity;
     }
 
-    public void PreInstall(Vehicle vehicle) {
-        
-    }
+    public void PreInstall(Vehicle vehicle) {}
 
-    public void PostInstall(Vehicle vehicle) {
-
-    }
+    public void PostInstall(Vehicle vehicle) {}
 
     public void Uninstall(Vehicle vehicle) {
-        vehicle.resources[PowerSource.Fuel].Capacity -= moddedTankSize - originalTankSize;
+        vehicle.resources[ResourceType].Capacity -= moddedTankSize - originalTankSize;
     }
 
-    public void OnUse() {
-        
-    }
+    public void OnUse() {}
 }

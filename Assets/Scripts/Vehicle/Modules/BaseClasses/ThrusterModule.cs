@@ -8,13 +8,8 @@ public abstract class ThrusterModule : IModule
     public virtual string Name { get => _name; set => _name = value; }
     protected ModuleType _moduleType = ModuleType.Thruster;
     public virtual ModuleType ModuleType { get => _moduleType; set => _moduleType = value; }
-    private Vehicle _vehicle;
-    public virtual Vehicle Vehicle {
-        get => _vehicle;
-        set {
-            _vehicle = value;
-        }
-    }
+    protected Vehicle _vehicle;
+    public virtual Vehicle Vehicle { get => _vehicle; set => _vehicle = value; }
     protected float _baseCost = 0f;
     public virtual float BaseCost { get => _baseCost; set => _baseCost = value; }
     protected float _thrustScale = 1f;
@@ -31,13 +26,9 @@ public abstract class ThrusterModule : IModule
         Vehicle = vehicle;
     }
 
-    public virtual void PreInstall(Vehicle vehicle) {
+    public virtual void PreInstall(Vehicle vehicle) {}
 
-    }
-
-    public virtual void PostInstall(Vehicle vehicle) {
-        
-    }
+    public virtual void PostInstall(Vehicle vehicle) {}
 
     public virtual void Uninstall(Vehicle vehicle) {
         Vehicle = null;

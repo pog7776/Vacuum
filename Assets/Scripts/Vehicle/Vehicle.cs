@@ -69,7 +69,6 @@ public class Vehicle : Controllable
         EngineModule baseEngine = new EngineModule(PowerSource.Fuel, 0.1f);
         baseEngine.ThrustOutput = moveSpeed;
         InstallModule(baseEngine);
-        //resources[PowerSource.Fuel].Value = resources.fuelCapacity;
 
         ResourceTankModule fuelTank = new ResourceTankModule(ModuleType.FuelTank, PowerSource.Fuel, this);
         fuelTank.Capacity = fuelCapacity;
@@ -101,29 +100,12 @@ public class Vehicle : Controllable
 
     protected override void FixedUpdate() {
         base.FixedUpdate();
-        // if(posessed) {
-        //     if(posessed && IsMoveInput())
-        //     {
-        //         Move(new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"),0));
-        //     }
-
-        //     LookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        // }
-
-        //Debug.Log("Velocity: " + rb.velocity.magnitude);
         if(afterBurnerEngaged) {
             AOnAfterBurner?.Invoke();
         }
     }
 
     protected override void Move(Vector3 direction) {
-        // // TODO put this responsibility on the modules
-        // if(resources[PowerSource.Fuel].Value > 0) {
-        //     //rb.AddForce((Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position) * (moveSpeed * direction.y));
-        //     RigidBody.AddForce(transform.up * (MoveSpeed * direction.y));
-        //     RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (MoveSpeed * StrafeMod));            
-        // }
-
         if(direction != Vector3.zero) {
             AOnMove?.Invoke();
         }
@@ -135,7 +117,6 @@ public class Vehicle : Controllable
         } else {
             afterBurnerEngaged = false;
         }
-        //afterBurnerEngaged = value.Get<bool>();
     }
 
     public override void Posess() {
@@ -285,7 +266,6 @@ public class Resource {
     public Resource(PowerSource resourceType, float capacity) {
         PowerSource = resourceType;
         Capacity = capacity;
-        //Refuel(Capacity);
     }
 
     public void Refuel(float fuelAmount) {
