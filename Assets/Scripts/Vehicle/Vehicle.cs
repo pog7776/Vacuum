@@ -2,13 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Vehicle : Controllable
 {
-    private float strafeMod = 0.5f;
+    private float _strafeMod = 0.5f;
+    public float StrafeMod {
+        get => _strafeMod;
+        set => _strafeMod = value;
+    }
 
     [SerializeField]
     private float turnSpeed = 1f;
+    [SerializeField]
+    private float fuelCapacity = 100;
+    [SerializeField]
+    private float batteryCapacity = 100;
 
     [SerializeField]
     public ShipResources resources;
@@ -27,6 +36,7 @@ public class Vehicle : Controllable
 
     #region Events
     public event Action AOnMove;
+    public event Action AOnAfterBurner;
     #endregion
 
     // Start is called before the first frame update
@@ -55,16 +65,24 @@ public class Vehicle : Controllable
         }
         
         // Install the base engine
-        EngineModule baseEngine = new EngineModule(this);
+        EngineModule baseEngine = new EngineModule(this, PowerSource.Fuel, 0.1f);
         baseEngine.ThrustOutput = moveSpeed;
         InstallModule(baseEngine);
         //resources[PowerSource.Fuel].Value = resources.fuelCapacity;
 
-        FuelTankModule fuelTank = new FuelTankModule(this);
-        fuelTank.Capacity = 100;
-        Debug.Log("Before Install: " + resources[PowerSource.Fuel].Capacity);
+        ResourceTankModule fuelTank = new ResourceTankModule(ModuleType.FuelTank, PowerSource.Fuel, this);
+        fuelTank.Capacity = fuelCapacity;
         InstallModule(fuelTank);
-        Debug.Log("After Install: " + resources[PowerSource.Fuel].Capacity);
+
+        ResourceTankModule battery = new ResourceTankModule(ModuleType.Battery, PowerSource.Energy, this);
+        battery.Capacity = batteryCapacity;
+        InstallModule(battery);
+
+        ThrusterModule ionEngine = new ThrusterModule(this, PowerSource.Energy, 0.05f);
+        ionEngine.ThrustOutput = 5;
+        ionEngine.PowerConsumption.Source = PowerSource.Energy;
+        ionEngine.PowerConsumption.Rate = 0.05f;
+        InstallModule(ionEngine);
     }
 
     // Update is called once per frame
@@ -91,17 +109,20 @@ public class Vehicle : Controllable
     }
 
     protected override void Move(Vector3 direction) {
-        if(resources[PowerSource.Fuel].Value > 0) {
-            //rb.AddForce((Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position) * (moveSpeed * direction.y));
-            RigidBody.AddForce(transform.up * (MoveSpeed * direction.y));
-            RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (MoveSpeed * strafeMod));
+        // // TODO put this responsibility on the modules
+        // if(resources[PowerSource.Fuel].Value > 0) {
+        //     //rb.AddForce((Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position) * (moveSpeed * direction.y));
+        //     RigidBody.AddForce(transform.up * (MoveSpeed * direction.y));
+        //     RigidBody.AddRelativeForce(new Vector3(direction.x, 0, 0) * (MoveSpeed * StrafeMod));
 
-            if(direction != Vector3.zero) {
-                AOnMove?.Invoke();
-                Debug.Log("Fuel: " + resources[PowerSource.Fuel].Value);
-            }
+            
+        // }
+        if(direction != Vector3.zero) {
+            AOnMove?.Invoke();
         }
     }
+
+    public void OnAfterBurner(InputValue value) => AOnAfterBurner?.Invoke();
 
     public override void Posess() {
         base.Posess();
@@ -157,8 +178,8 @@ public class Vehicle : Controllable
 
     private ThrusterModule mod;
     public void TestModule(float thrust) {
-        mod = mod == null ? new ThrusterModule(this) : mod;
-        mod.ThrustScale = thrust;
+        mod = mod == null ? new ThrusterModule(this, PowerSource.Fuel, 0.05f) : mod;
+        mod.ThrustOutput = thrust;
         InstallModule(mod);
     }
 
@@ -213,6 +234,7 @@ public class Vehicle : Controllable
 
     public void TestRefuel(float amount) {
         Refuel(PowerSource.Fuel, amount);
+        Refuel(PowerSource.Energy, amount);
     }
 }
 
@@ -244,6 +266,8 @@ public class Resource {
     [SerializeField]
     public float Value { get; set; }
 
+    public event Action AOnUpdateResource;
+
     public Resource(PowerSource resourceType, float capacity) {
         PowerSource = resourceType;
         Capacity = capacity;
@@ -259,10 +283,12 @@ public class Resource {
             Value = Capacity;
             Debug.Log("Refuled: " + fueledAmount);
         }
+        AOnUpdateResource?.Invoke();
     }
 
     public void Consume(float amount) {
         Value -= amount;
+        AOnUpdateResource?.Invoke();
     }
 }
 

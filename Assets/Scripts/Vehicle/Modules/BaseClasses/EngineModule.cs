@@ -8,30 +8,29 @@ public class EngineModule : IModule
     public string Name { get => _name; set => _name = value; }
     protected ModuleType _moduleType = ModuleType.Engine;
     public ModuleType ModuleType { get => _moduleType; set => _moduleType = value; }
+    private Vehicle _vehicle;
+    public Vehicle Vehicle {
+        get => _vehicle;
+        set {
+            _vehicle = value;
+            PowerConsumption.Vehicle = value;
+        }
+    }
     protected float _baseCost = 0f;
     public float BaseCost { get => _baseCost; set => _baseCost = value; }
     protected float _thrustOutput = 1f;
     public float ThrustOutput { get => _thrustOutput; set => _thrustOutput = value; }
-    // TODO make a base "thruster" class or interface that handles fuel
-    // That way I can iterate over all thrust module types to figure out fuel consumption
-    // Interface might work better so I can include things like fuel and power usage
-    // Or just a "thrust" interface that contains most of this functionality
     protected float _fuelConsumption = 0f;
     public float FuelConsumption { get => _fuelConsumption; set => _fuelConsumption = value; }
-
     public PowerConsumption PowerConsumption { get; set; }
 
-    private float originalSpeed;
-    private float moddedSpeed;
-
-    public EngineModule(Vehicle vehicle) {
-        PowerConsumption = new PowerConsumption(PowerSource.Fuel, 0.1f, vehicle);
+    public EngineModule(Vehicle vehicle, PowerSource source, float consumptionRate) {
+        PowerConsumption = new PowerConsumption(source, consumptionRate);
     }
 
     public void Install(Vehicle vehicle) {
-        originalSpeed = vehicle.moveSpeed;
-        vehicle.moveSpeed = ThrustOutput;
-        moddedSpeed = vehicle.moveSpeed;
+        Vehicle = vehicle;
+        vehicle.AOnMove += OnUse;
     }
 
     public void PreInstall(Vehicle vehicle) {
@@ -43,6 +42,14 @@ public class EngineModule : IModule
     }
 
     public void Uninstall(Vehicle vehicle) {
-        vehicle.moveSpeed -= moddedSpeed - originalSpeed;
+        Vehicle = null;
+        vehicle.AOnMove -= OnUse;
+    }
+
+    public void OnUse() {
+        if(Vehicle.resources[PowerConsumption.Source].Value > 0) {
+            Vehicle.RigidBody.AddForce(Vehicle.transform.up * (ThrustOutput * Vehicle.MoveDirection.y));
+            Vehicle.RigidBody.AddRelativeForce(new Vector3(Vehicle.MoveDirection.x, 0, 0) * (ThrustOutput * Vehicle.StrafeMod));
+        }
     }
 }

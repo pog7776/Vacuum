@@ -6,6 +6,8 @@ public interface IModule : IItem {
     public ModuleType ModuleType { get; set; }
     public PowerConsumption PowerConsumption { get; set; }
 
+    public Vehicle Vehicle { get; set; }
+
     // TODO Wear over time?
     //public float Age { get; set; }
     public void PreInstall(Vehicle vehicle);
@@ -13,6 +15,8 @@ public interface IModule : IItem {
     // TODO Not sure if these are needed? ⬇⬇
     public void PostInstall(Vehicle vehicle);
     public void Uninstall(Vehicle vehicle);
+
+    public void OnUse();
 }
 
 public enum ModuleType {
@@ -38,19 +42,31 @@ public class PowerConsumption {
     // Then have the resource subscribe to an event or action in the vehicle class that uses a resource
     public PowerSource Source { get; set; }
     public float Rate { get; set; }
-    private Vehicle vehicle;
-
-    public PowerConsumption(PowerSource source, float rate, Vehicle vehicle) {
-        Source = source;
-        Rate = rate;
-        this.vehicle = vehicle;
-
-        if(Source != PowerSource.None) {
-            vehicle.AOnMove += ConsumeResource;
+    private Vehicle _vehicle;
+    public Vehicle Vehicle {
+        get => _vehicle;
+        set {
+            if(value == null) {
+                _vehicle.AOnMove -= ConsumeResource;
+            }
+            else if(Source != PowerSource.None) {
+                value.AOnMove += ConsumeResource;
+            }
+            _vehicle = value;
         }
     }
 
+    public PowerConsumption(PowerSource source, float rate) {
+        Source = source;
+        Rate = rate;
+        //this.vehicle = vehicle;
+
+        // if(Source != PowerSource.None) {
+        //     Vehicle.AOnMove += ConsumeResource;
+        // }
+    }
+
     private void ConsumeResource() {
-        vehicle.ConsumeResource(Source, Rate);
+        Vehicle.ConsumeResource(Source, Rate);
     }
 }

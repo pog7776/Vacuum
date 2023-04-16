@@ -123,7 +123,7 @@
                 {
                     "name": "",
                     "id": "e7c588e2-cf4c-400a-ae76-a81ca035d7c5",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/alt",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -139,12 +139,21 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "8e4d5ba0-e099-4644-b8ea-ff17dd58af88",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AfterBurner",
+                    "type": "Button",
+                    "id": "58ff871a-a847-44e6-8765-25b8004ae904",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -202,6 +211,17 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "b17daaa4-7592-4c0f-9e79-e5ce37fc9350",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AfterBurner",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
