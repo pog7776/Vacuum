@@ -86,7 +86,7 @@ public class Vehicle : Controllable
         InstallModule(ionEngine);
 
         AfterBurnerModule afterBurner = new AfterBurnerModule(PowerSource.Fuel, 0.5f);
-        afterBurner.ThrustOutput = moveSpeed;
+        afterBurner.ThrustOutput = 40;
         InstallModule(afterBurner);
     }
 
@@ -290,7 +290,7 @@ public class Resource {
 
     public void Refuel(float fuelAmount) {
         if(Value + fuelAmount <= Capacity) {
-            Value = fuelAmount;
+            Value += fuelAmount;
             Debug.Log("Refuled: " + fuelAmount);
         } else {
             float fueledAmount = Capacity - Value;
