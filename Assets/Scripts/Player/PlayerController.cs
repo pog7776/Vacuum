@@ -129,6 +129,8 @@ public class PlayerController : Controllable
             //     rb.AddForce(rb.velocity);
             // }
 
+            //RigidBody.velocity = currentStation.LocalVelocity;
+
             // TODO Really need to figure this out
             // If a station is within another station
             // There was another issue i saw but i cant think of it right now

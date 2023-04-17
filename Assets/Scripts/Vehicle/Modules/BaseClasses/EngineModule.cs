@@ -10,12 +10,14 @@ public class EngineModule : ThrusterModule {
 
     public override void Install(Vehicle vehicle) {
         base.Install(vehicle);
-        vehicle.AOnMove += OnUse;
+        vehicle.AOnMoveForward += OnUse;
+        vehicle.AOnMoveBackward += OnUse;
     }
 
     public override void Uninstall(Vehicle vehicle) {
         base.Uninstall(vehicle);
-        vehicle.AOnMove -= OnUse;
+        vehicle.AOnMoveForward -= OnUse;
+        vehicle.AOnMoveBackward -= OnUse;
     }
 
     public override void OnUse() {

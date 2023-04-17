@@ -37,6 +37,10 @@ public class Vehicle : Controllable
 
     #region Events
     public event Action AOnMove;
+    public event Action AOnMoveForward;
+    public event Action AOnMoveBackward;
+    public event Action AOnMoveLeft;
+    public event Action AOnMoveRight;
     public event Action AOnAfterBurner;
     #endregion
 
@@ -72,20 +76,24 @@ public class Vehicle : Controllable
 
         ResourceTankModule fuelTank = new ResourceTankModule(ModuleType.FuelTank, PowerSource.Fuel, this);
         fuelTank.Capacity = fuelCapacity;
+        fuelTank.Name = "FuelTank";
         InstallModule(fuelTank);
 
         ResourceTankModule battery = new ResourceTankModule(ModuleType.Battery, PowerSource.Energy, this);
         battery.Capacity = batteryCapacity;
+        battery.Name = "Battery";
         InstallModule(battery);
 
         AuxThrustModule ionEngine = new AuxThrustModule(PowerSource.Energy, 0.05f);
         ionEngine.ThrustOutput = 5;
         ionEngine.PowerConsumption.Source = PowerSource.Energy;
         ionEngine.PowerConsumption.Rate = 0.05f;
+        ionEngine.Name = "Ion Engine";
         InstallModule(ionEngine);
 
         AfterBurnerModule afterBurner = new AfterBurnerModule(PowerSource.Fuel, 0.5f);
         afterBurner.ThrustOutput = 40;
+        afterBurner.Name = "AfterBurner";
         InstallModule(afterBurner);
     }
 
@@ -100,14 +108,20 @@ public class Vehicle : Controllable
 
     protected override void FixedUpdate() {
         base.FixedUpdate();
-        if(afterBurnerEngaged) {
-            AOnAfterBurner?.Invoke();
+        if(posessed) {
+            if(afterBurnerEngaged) {
+                AOnAfterBurner?.Invoke();
+            }
         }
     }
 
     protected override void Move(Vector3 direction) {
         if(direction != Vector3.zero) {
             AOnMove?.Invoke();
+            if(direction.y > 0) { AOnMoveForward?.Invoke(); }
+            if(direction.y < 0) { AOnMoveBackward?.Invoke(); }
+            if(direction.x > 0) { AOnMoveRight?.Invoke(); }
+            if(direction.x < 0) { AOnMoveLeft?.Invoke(); }
         }
     }
 
