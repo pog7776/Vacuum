@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+// TODO Make an IInteractable so I can extend it for custom interactables
+// Or should I just inherit from it?
+// Or both?
 public class Interactable : MonoBehaviour {
     [SerializeField]
     private bool debug = false;

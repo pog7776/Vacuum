@@ -35,6 +35,8 @@ public class Vehicle : Controllable
     [SerializeField]
     private ModuleCapacityDictionary moduleCapacity;
 
+    private GameObject dockAnchor;
+
     #region Events
     public event Action AOnMove;
     public event Action AOnMoveForward;
@@ -112,6 +114,9 @@ public class Vehicle : Controllable
             if(afterBurnerEngaged) {
                 AOnAfterBurner?.Invoke();
             }
+        } else if(dockAnchor) {
+            transform.position = dockAnchor.transform.position;
+            transform.rotation = dockAnchor.transform.rotation;
         }
     }
 
@@ -136,12 +141,25 @@ public class Vehicle : Controllable
     public override void Posess() {
         base.Posess();
         RigidBody.mass = 1;
+
+        if(dockAnchor) {
+            Destroy(dockAnchor);
+        }
     }
 
     public override void UnPosess() {
         base.UnPosess();
         if(currentStation) {
             RigidBody.mass = dockedMass;
+
+            //TODO Look into re-using dockAnchor
+            if(dockAnchor) {
+                Destroy(dockAnchor);
+            }
+            dockAnchor = new GameObject();
+            dockAnchor.transform.position = transform.position;
+            dockAnchor.transform.rotation = transform.rotation;
+            dockAnchor.transform.parent = currentStation.transform;
         }
     }
 

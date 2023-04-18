@@ -54447,13 +54447,15 @@ GameObject:
   - component: {fileID: 2065645542}
   - component: {fileID: 2065645541}
   - component: {fileID: 2065645540}
+  - component: {fileID: 2065645543}
+  - component: {fileID: 2065645544}
   m_Layer: 8
   m_Name: BigShip
   m_TagString: Gravity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!50 &2065645535
 Rigidbody2D:
   serializedVersion: 4
@@ -54510,8 +54512,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e324d1c67a616a4e96c285c02205388, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialImpulse: {x: 0, y: -800, z: 0}
-  debug: 0
+  initialImpulse: {x: 0, y: 0, z: 0}
+  debug: 1
 --- !u!224 &2065645538
 RectTransform:
   m_ObjectHideFlags: 0
@@ -54546,18 +54548,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163e76dd85e69a4459cca174fa5130f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 20
   moveSpeedMod: 0
   lookatOffset: {x: 0, y: 0, z: 0}
-  turnSpeed: 1
-  fuelCapacity: 100
+  turnSpeed: 3
+  fuelCapacity: 500
   batteryCapacity: 100
-  dismountAnchor: {fileID: 638731626}
+  dismountAnchor: {fileID: 767712849}
   currentStation: {fileID: 0}
   dockedMass: 50
   moduleCapacity:
     keys: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000
-    values: 090000000900000009000000090000000900000009000000090000000900000009000000090000000900000009000000
+    values: 010000000a00000001000000010000000100000001000000010000000100000001000000010000000100000001000000
 --- !u!61 &2065645540
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -54577,17 +54579,17 @@ BoxCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 1.8424311, y: -0.9355316}
@@ -54641,6 +54643,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2065645534}
   m_CullTransparentMesh: 1
+--- !u!114 &2065645543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065645534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10fb806d393482e43b540cd3b9d1f5ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debug: 0
+  _onInteract:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 154245170}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: EnterVehicle
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2065645539}
+          m_ObjectArgumentAssemblyTypeName: Vehicle, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2065645539}
+        m_TargetAssemblyTypeName: Vehicle, Assembly-CSharp
+        m_MethodName: TestRefuel
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 10000
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _onHoverEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  _onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  _onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2065645544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065645534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: e7e222ec09661d1409d5a3d08d0ee2ad, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Vehicle
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 519420031}
 --- !u!1 &2066615735
 GameObject:
   m_ObjectHideFlags: 0
