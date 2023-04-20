@@ -3936,7 +3936,7 @@ MonoBehaviour:
   fuelCapacity: 500
   batteryCapacity: 100
   dismountAnchor: {fileID: 1031673585}
-  currentStation: {fileID: 0}
+  currentStation: {fileID: 826203411}
   dockedMass: 50
   moduleCapacity:
     keys: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b000000

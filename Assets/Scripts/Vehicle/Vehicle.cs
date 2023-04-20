@@ -25,7 +25,7 @@ public class Vehicle : Controllable
 
     public Transform dismountAnchor;
 
-    [HideInInspector]
+    //[HideInInspector]
     public Station currentStation;
 
     [SerializeField]
@@ -61,6 +61,8 @@ public class Vehicle : Controllable
             dismountAnchor.name = "GeneratedDismountAnchor";
             dismountAnchor.transform.localPosition = new Vector3(-1, 0, 0);
         }
+
+        Anchor();
 
         InitShip();
     }
@@ -114,7 +116,11 @@ public class Vehicle : Controllable
             if(afterBurnerEngaged) {
                 AOnAfterBurner?.Invoke();
             }
-        } else if(dockAnchor) {
+        }
+    }
+
+    private void LateUpdate() {
+        if(!posessed && dockAnchor) {
             transform.position = dockAnchor.transform.position;
             transform.rotation = dockAnchor.transform.rotation;
         }
@@ -142,9 +148,7 @@ public class Vehicle : Controllable
         base.Posess();
         RigidBody.mass = 1;
 
-        if(dockAnchor) {
-            Destroy(dockAnchor);
-        }
+        UnAnchor();
     }
 
     public override void UnPosess() {
@@ -152,6 +156,12 @@ public class Vehicle : Controllable
         if(currentStation) {
             RigidBody.mass = dockedMass;
 
+            Anchor();
+        }
+    }
+
+    private void Anchor() {
+        if(currentStation) {
             //TODO Look into re-using dockAnchor
             if(dockAnchor) {
                 Destroy(dockAnchor);
@@ -160,6 +170,12 @@ public class Vehicle : Controllable
             dockAnchor.transform.position = transform.position;
             dockAnchor.transform.rotation = transform.rotation;
             dockAnchor.transform.parent = currentStation.transform;
+        }
+    }
+
+    private void UnAnchor() {
+        if(dockAnchor) {
+            Destroy(dockAnchor);
         }
     }
 
@@ -182,15 +198,7 @@ public class Vehicle : Controllable
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag == "Gravity") {
-            if(!other.gameObject.TryGetComponent<Station>(out currentStation)) {
-                currentStation = other.gameObject.GetComponentInParent<Station>();
-            }
-
-            if(!posessed) {
-                RigidBody.mass = dockedMass;
-            }
-        }
+        TrySetStation(other);
     }
 
     private void OnTriggerExit2D(Collider2D other) {
@@ -200,6 +208,24 @@ public class Vehicle : Controllable
             }
 
             RigidBody.mass = 1;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        if(!currentStation) {
+            TrySetStation(other);
+        }
+    }
+
+    private void TrySetStation(Collider2D station) {
+        if(station.tag == "Gravity") {
+            if(!station.gameObject.TryGetComponent<Station>(out currentStation)) {
+                currentStation = station.gameObject.GetComponentInParent<Station>();
+            }
+
+            if(!posessed) {
+                RigidBody.mass = dockedMass;
+            }
         }
     }
 
