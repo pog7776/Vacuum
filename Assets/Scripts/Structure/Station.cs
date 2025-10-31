@@ -21,7 +21,7 @@ public class Station : MonoBehaviour
 
     void Awake()
     {
-        lastPosition = transform.position;
+        lastPosition = transform.localPosition;
 
         entities = new List<Entity>();
 
@@ -32,19 +32,19 @@ public class Station : MonoBehaviour
         }
 
         RigidBody.AddForce(initialImpulse);
-        LocalVelocity = transform.position - lastPosition;
+        LocalVelocity = transform.localPosition - lastPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        LocalVelocity = transform.position - lastPosition;
+        LocalVelocity = transform.localPosition - lastPosition;
         foreach(Entity entity in entities) {
             entity.transform.Translate(LocalVelocity, transform);
             //entity.transform.position += LocalVelocity;
         }
 
-        lastPosition = transform.position;
+        lastPosition = transform.localPosition;
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

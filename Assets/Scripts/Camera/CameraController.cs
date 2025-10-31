@@ -77,24 +77,29 @@ public class CameraController : MonoBehaviour
 
     private void LerpToSize() {
         if(cam != null) {
-            cam.orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, TargetSize, Time.deltaTime * ZoomSpeed);
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, TargetSize, Time.deltaTime * ZoomSpeed);
         }
     }
 
     private void LockCamera()
     {
         // Implement lerp or bool to toggle lerp to target?
-        if(FollowTarget) {
-            Vector3 newPos = new Vector3(FollowTarget.transform.position.x, FollowTarget.transform.position.y, cam.transform.position.z);
+        if(FollowTarget)
+        {
+            Vector3 targetPosition = FollowTarget.transform.position;
+            Vector3 newPos = new(targetPosition.x, targetPosition.y, cam.transform.position.z);
 
-            if(offsetCamera) {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                Vector3 dir = (newPos - mousePos).normalized;
-                Vector2 camCenter = new Vector2(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
+            if(offsetCamera)
+            {
+                Vector3 mousePos = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                Vector2 dir = (newPos - mousePos).normalized;
+                Vector2 camCenter = new(cam.pixelWidth / 2f, cam.pixelHeight / 2f);
                 float power = Vector2.Distance(Mouse.current.position.ReadValue(), camCenter) / 100;
                 newPos -= Vector3.ClampMagnitude(dir * power, 5);
                 //cam.transform.position = Vector3.Slerp(cam.transform.position, -newPos, Time.fixedDeltaTime);
             }
+
+            //newPos.z = 0;
 
             cam.transform.position = newPos;
         }

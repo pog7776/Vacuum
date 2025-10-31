@@ -18,6 +18,8 @@ public class PlayerController : Controllable
     public TMP_Text coordinates;
     public TMP_Text speed;
 
+    private Transform originalParent;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -44,7 +46,7 @@ public class PlayerController : Controllable
         base.FixedUpdate();
 
         //Debug.Log("Movement: " + Input.GetAxisRaw("Horizontal") + " | " + Input.GetAxisRaw("Vertical"));
-        coordinates.text = transform.position.x.ToString("#.##") + " | " + transform.position.y.ToString("#.##");
+        coordinates.text = transform.localPosition.x.ToString("#.##") + " | " + transform.localPosition.y.ToString("#.##");
         if(currentVehicle) {
             if(currentVehicle.RigidBody.velocity.magnitude > 0) {
                 speed.text = currentVehicle.RigidBody.velocity.magnitude.ToString("#.##");
@@ -76,7 +78,10 @@ public class PlayerController : Controllable
             currentVehicle = vehicle;
             // TODO seat anchor position on the vehicle
             transform.position = vehicle.transform.position;
+
+            originalParent = transform.parent;
             transform.parent = vehicle.transform;
+
             RigidBody.simulated = false;
             playerSprite.enabled = false;
             vehicle.Posess();
@@ -91,7 +96,8 @@ public class PlayerController : Controllable
     {
         if(currentVehicle != null) {
             transform.position = currentVehicle.dismountAnchor.position;
-            transform.parent = null;
+            transform.parent = originalParent;
+
             RigidBody.simulated = true;
             if(currentVehicle.currentStation) {
                 RigidBody.velocity = currentVehicle.currentStation.RigidBody.velocity;
